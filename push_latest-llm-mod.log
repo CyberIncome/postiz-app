@@ -1,0 +1,42 @@
+The push refers to repository [ghcr.io/cyberincome/postiz-app]
+5fd642e57587: Preparing
+92e04d2144eb: Preparing
+86713caf60d0: Preparing
+99f58374b18d: Preparing
+26f5bbb2d400: Preparing
+526ee007ae19: Preparing
+5f0f0f015cc8: Preparing
+c1fad6185b2a: Preparing
+d9fdef1fef04: Preparing
+7368e508f14d: Preparing
+90786ae988c6: Preparing
+85547fed3bc5: Preparing
+66d247e9f489: Preparing
+fc228dab618f: Preparing
+ba79b2c01278: Preparing
+5f0f0f015cc8: Waiting
+526ee007ae19: Waiting
+c1fad6185b2a: Waiting
+d9fdef1fef04: Waiting
+7368e508f14d: Waiting
+90786ae988c6: Waiting
+85547fed3bc5: Waiting
+66d247e9f489: Waiting
+fc228dab618f: Waiting
+ba79b2c01278: Waiting
+26f5bbb2d400: Pushed
+86713caf60d0: Pushed
+99f58374b18d: Pushed
+526ee007ae19: Pushed
+5f0f0f015cc8: Pushed
+d9fdef1fef04: Pushed
+c1fad6185b2a: Pushed
+85547fed3bc5: Layer already exists
+66d247e9f489: Layer already exists
+fc228dab618f: Layer already exists
+ba79b2c01278: Layer already exists
+7368e508f14d: Pushed
+90786ae988c6: Pushed
+5fd642e57587: Pushed
+92e04d2144eb: Pushed
+debug-build: digest: sha256:35708b439c8fcb4942c6fb2f93e5cc32b0f5085ffd82310f89a297f100d61f77 size: 3461

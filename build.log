@@ -1,0 +1,275 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.dev
+#1 transferring dockerfile: 570B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine3.19
+#2 ...
+
+#3 [auth] library/node:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine3.19
+#2 DONE 0.9s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 522B done
+#4 DONE 0.0s
+
+#5 [ 1/12] FROM docker.io/library/node:20-alpine3.19@sha256:1cc9088b0fbcb2009a8fc2cb57916cd129cd5e32b3c75fb12bb24bac76917a96
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 60.88kB 0.1s done
+#6 DONE 0.1s
+
+#7 [ 2/12] RUN apk add --no-cache g++ make py3-pip supervisor bash caddy
+#7 0.385 fetch https://dl-cdn.alpinelinux.org/alpine/v3.19/main/x86_64/APKINDEX.tar.gz
+#7 0.735 fetch https://dl-cdn.alpinelinux.org/alpine/v3.19/community/x86_64/APKINDEX.tar.gz
+#7 0.993 (1/44) Upgrading musl (1.2.4_git20230717-r4 -> 1.2.4_git20230717-r5)
+#7 1.057 (2/44) Installing ncurses-terminfo-base (6.4_p20231125-r0)
+#7 1.107 (3/44) Installing libncursesw (6.4_p20231125-r0)
+#7 1.151 (4/44) Installing readline (8.2.1-r2)
+#7 1.201 (5/44) Installing bash (5.2.21-r0)
+#7 1.260 Executing bash-5.2.21-r0.post-install
+#7 1.263 (6/44) Installing ca-certificates (20241121-r1)
+#7 1.318 (7/44) Installing caddy (2.7.6-r3)
+#7 1.371 Executing caddy-2.7.6-r3.pre-install
+#7 1.837 (8/44) Installing libstdc++-dev (13.2.1_git20231014-r0)
+#7 2.009 (9/44) Installing jansson (2.14-r4)
+#7 2.048 (10/44) Installing zstd-libs (1.5.5-r8)
+#7 2.103 (11/44) Installing binutils (2.41-r1)
+#7 2.241 (12/44) Installing libgomp (13.2.1_git20231014-r0)
+#7 2.290 (13/44) Installing libatomic (13.2.1_git20231014-r0)
+#7 2.328 (14/44) Installing gmp (6.3.0-r0)
+#7 2.441 (15/44) Installing isl26 (0.26-r1)
+#7 2.603 (16/44) Installing mpfr4 (4.2.1-r0)
+#7 2.661 (17/44) Installing mpc1 (1.3.1-r1)
+#7 2.708 (18/44) Installing gcc (13.2.1_git20231014-r0)
+#7 4.350 (19/44) Installing musl-dev (1.2.4_git20230717-r5)
+#7 4.497 (20/44) Installing libc-dev (0.7.2-r5)
+#7 4.533 (21/44) Installing g++ (13.2.1_git20231014-r0)
+#7 5.020 (22/44) Installing make (4.4.1-r2)
+#7 5.062 (23/44) Installing libexpat (2.7.0-r0)
+#7 5.106 (24/44) Installing libbz2 (1.0.8-r6)
+#7 5.145 (25/44) Installing libffi (3.4.4-r3)
+#7 5.183 (26/44) Installing gdbm (1.23-r1)
+#7 5.224 (27/44) Installing xz-libs (5.4.5-r1)
+#7 5.269 (28/44) Installing mpdecimal (2.5.1-r2)
+#7 5.340 (29/44) Installing libpanelw (6.4_p20231125-r0)
+#7 5.384 (30/44) Installing sqlite-libs (3.44.2-r1)
+#7 5.558 (31/44) Installing python3 (3.11.12-r1)
+#7 5.930 (32/44) Installing python3-pycache-pyc0 (3.11.12-r1)
+#7 6.122 (33/44) Installing pyc (3.11.12-r1)
+#7 6.160 (34/44) Installing py3-setuptools-pyc (70.3.0-r0)
+#7 6.255 (35/44) Installing py3-pip-pyc (23.3.1-r0)
+#7 6.389 (36/44) Installing py3-parsing (3.1.1-r0)
+#7 6.436 (37/44) Installing py3-parsing-pyc (3.1.1-r0)
+#7 6.492 (38/44) Installing py3-packaging-pyc (23.2-r0)
+#7 6.538 (39/44) Installing python3-pyc (3.11.12-r1)
+#7 6.573 (40/44) Installing py3-packaging (23.2-r0)
+#7 6.621 (41/44) Installing py3-setuptools (70.3.0-r0)
+#7 6.692 (42/44) Installing py3-pip (23.3.1-r0)
+#7 6.803 (43/44) Installing supervisor (4.2.5-r4)
+#7 6.857 (44/44) Installing supervisor-pyc (4.2.5-r4)
+#7 6.920 Executing busybox-1.36.1-r19.trigger
+#7 6.924 Executing ca-certificates-20241121-r1.trigger
+#7 6.958 OK: 332 MiB in 60 packages
+#7 DONE 7.2s
+
+#8 [ 3/12] RUN npm --no-update-notifier --no-fund --global install pnpm@10.6.1 pm2
+#8 7.071 
+#8 7.071 added 136 packages in 7s
+#8 DONE 7.2s
+
+#9 [ 4/12] WORKDIR /app
+#9 DONE 0.1s
+
+#10 [ 5/12] COPY . /app
+#10 DONE 0.3s
+
+#11 [ 6/12] COPY var/docker/supervisord.conf /etc/supervisord.conf
+#11 DONE 0.1s
+
+#12 [ 7/12] COPY var/docker/Caddyfile /app/Caddyfile
+#12 DONE 0.1s
+
+#13 [ 8/12] COPY var/docker/entrypoint.sh /app/entrypoint.sh
+#13 DONE 0.1s
+
+#14 [ 9/12] COPY var/docker/supervisord/caddy.conf /etc/supervisor.d/caddy.conf
+#14 DONE 0.1s
+
+#15 [10/12] RUN chmod +x /app/entrypoint.sh
+#15 DONE 0.3s
+
+#16 [11/12] RUN pnpm install
+#16 0.892 Scope: all 7 workspace projects
+#16 1.070 Lockfile is up to date, resolution step is skipped
+#16 1.594 Packages: +3571
+#16 1.594 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#16 1.991 
+#16 1.991    ╭───────────────────────────────────────────────────────────────────╮
+#16 1.991    │                                                                   │
+#16 1.991    │                Update available! 10.6.1 → 10.11.0.                │
+#16 1.991    │   Changelog: https://github.com/pnpm/pnpm/releases/tag/v10.11.0   │
+#16 1.991    │                 Run "pnpm add -g pnpm" to update.                 │
+#16 1.991    │                                                                   │
+#16 1.991    ╰───────────────────────────────────────────────────────────────────╯
+#16 1.991 
+#16 2.017 Progress: resolved 0, reused 0, downloaded 1, added 0
+#16 3.027 Progress: resolved 0, reused 0, downloaded 66, added 58
+#16 4.026 Progress: resolved 0, reused 0, downloaded 122, added 124
+#16 5.027 Progress: resolved 0, reused 0, downloaded 199, added 211
+#16 6.029 Progress: resolved 0, reused 0, downloaded 247, added 261
+#16 7.028 Progress: resolved 0, reused 0, downloaded 298, added 318
+#16 8.028 Progress: resolved 0, reused 0, downloaded 375, added 418
+#16 9.029 Progress: resolved 0, reused 0, downloaded 471, added 514
+#16 10.03 Progress: resolved 0, reused 0, downloaded 552, added 611
+#16 11.03 Progress: resolved 0, reused 0, downloaded 683, added 762
+#16 12.03 Progress: resolved 0, reused 0, downloaded 774, added 860
+#16 13.03 Progress: resolved 0, reused 0, downloaded 851, added 940
+#16 14.03 Progress: resolved 0, reused 0, downloaded 976, added 1079
+#16 15.03 Progress: resolved 0, reused 0, downloaded 1072, added 1178
+#16 16.03 Progress: resolved 0, reused 0, downloaded 1155, added 1273
+#16 17.03 Progress: resolved 0, reused 0, downloaded 1264, added 1393
+#16 18.03 Progress: resolved 0, reused 0, downloaded 1397, added 1554
+#16 19.04 Progress: resolved 0, reused 0, downloaded 1590, added 1766
+#16 20.04 Progress: resolved 0, reused 0, downloaded 1759, added 1955
+#16 21.03 Progress: resolved 0, reused 0, downloaded 1933, added 2178
+#16 22.03 Progress: resolved 0, reused 0, downloaded 2093, added 2339
+#16 23.03 Progress: resolved 0, reused 0, downloaded 2222, added 2499
+#16 24.03 Progress: resolved 0, reused 0, downloaded 2365, added 2662
+#16 25.03 Progress: resolved 0, reused 0, downloaded 2566, added 2867
+#16 26.03 Progress: resolved 0, reused 0, downloaded 2777, added 3096
+#16 27.03 Progress: resolved 0, reused 0, downloaded 2953, added 3322
+#16 28.03 Progress: resolved 0, reused 0, downloaded 3120, added 3571
+#16 28.61 Progress: resolved 0, reused 0, downloaded 3120, added 3571, done
+#16 28.64 node_modules/bcrypt install$ node-pre-gyp install --fallback-to-build
+#16 28.72 node_modules/bcrypt install: node-pre-gyp info it worked if it ends with ok
+#16 28.72 node_modules/bcrypt install: node-pre-gyp info using node-pre-gyp@1.0.11
+#16 28.72 node_modules/bcrypt install: node-pre-gyp info using node@20.18.1 | linux | x64
+#16 28.77 node_modules/bcrypt install: node-pre-gyp info check checked for "/app/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" (not found)
+#16 28.77 node_modules/bcrypt install: node-pre-gyp http GET https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.1.1/bcrypt_lib-v5.1.1-napi-v3-linux-x64-musl.tar.gz
+#16 29.76 node_modules/bcrypt install: node-pre-gyp info install unpacking napi-v3/bcrypt_lib.node
+#16 29.79 node_modules/bcrypt install: node-pre-gyp info extracted file count: 1 
+#16 29.79 node_modules/bcrypt install: [bcrypt] Success: "/app/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" is installed via remote
+#16 29.79 node_modules/bcrypt install: node-pre-gyp info ok 
+#16 29.80 node_modules/bcrypt install: Done
+#16 30.67 
+#16 30.67 ╭ Warning ─────────────────────────────────────────────────────────────────────╮│                                                                              ││   Ignored build scripts: @nestjs/core,                                       ││   @openapitools/openapi-generator-cli, @prisma/client, @prisma/engines,      ││   @scarf/scarf, @swc/core, @tailwindcss/oxide, bufferutil, canvas,           ││   core-js, core-js-pure, esbuild, msgpackr-extract, nx, prisma, sharp,       ││   unrs-resolver, utf-8-validate.                                             ││   Run "pnpm approve-builds" to pick which dependencies should be allowed     ││   to run scripts.                                                            ││                                                                              │╰──────────────────────────────────────────────────────────────────────────────╯
+#16 30.67 
+#16 31.22 . postinstall$ npm run update-plugins && npm run prisma-generate
+#16 31.52 . postinstall: > gitroom@1.0.0 update-plugins
+#16 31.52 . postinstall: > node build.plugins.js
+#16 31.68 . postinstall: > gitroom@1.0.0 prisma-generate
+#16 31.68 . postinstall: > pnpx prisma generate --schema ./libraries/nestjs-libraries/src/database/prisma/schema.prisma
+#16 33.01 . postinstall: Progress: resolved 1, reused 0, downloaded 0, added 0
+#16 34.01 . postinstall: Progress: resolved 5, reused 0, downloaded 0, added 0
+#16 34.54 . postinstall: Packages: +8
+#16 34.54 . postinstall: ++++++++
+#16 35.01 . postinstall: Progress: resolved 8, reused 1, downloaded 6, added 7
+#16 35.09 . postinstall: Progress: resolved 8, reused 1, downloaded 7, added 8, done
+#16 35.10 . postinstall: .../19726f7adfa-40/node_modules/prisma preinstall$ node scripts/preinstall-entry.js
+#16 35.15 . postinstall: .../19726f7adfa-40/node_modules/prisma preinstall: Done
+#16 36.94 . postinstall: Prisma schema loaded from libraries/nestjs-libraries/src/database/prisma/schema.prisma
+#16 37.62 . postinstall: ✔ Generated Prisma Client (v6.8.2) to ./node_modules/@prisma/client in 264ms
+#16 37.62 . postinstall: Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#16 37.63 . postinstall: Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+#16 37.68 . postinstall: Done
+#16 37.76 Done in 37.2s using pnpm v10.6.1
+#16 DONE 39.0s
+
+#17 [12/12] RUN pnpm run build
+#17 0.706 
+#17 0.706 > gitroom@1.0.0 build /app
+#17 0.706 > pnpm -r --workspace-concurrency=1 --filter ./apps/frontend --filter ./apps/backend --filter ./apps/workers  --filter ./apps/cron run build
+#17 0.706 
+#17 1.136 Scope: 4 of 7 workspace projects
+#17 1.144 
+#17 1.144 > postiz-frontend@1.0.0 build /app/apps/frontend
+#17 1.144 > next build
+#17 1.144 
+#17 1.677 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#17 1.677 This information is used to shape Next.js' roadmap and prioritize features.
+#17 1.677 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#17 1.677 https://nextjs.org/telemetry
+#17 1.677 
+#17 1.739   ▲ Next.js 14.2.28
+#17 1.739   - Experiments (use with caution):
+#17 1.739     · proxyTimeout
+#17 1.740 
+#17 1.815    Creating an optimized production build ...
+#17 65.09 request to https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap failed, reason: 
+#17 65.09 
+#17 65.09 Retrying 1/3...
+#17 93.12  ✓ Compiled successfully
+#17 93.12    Linting and checking validity of types ...
+#17 103.3    Collecting page data ...
+#17 104.2    Generating static pages (0/18) ...
+#17 106.5    Generating static pages (4/18) 
+#17 106.5    Generating static pages (8/18) 
+#17 107.5    Generating static pages (13/18) 
+#17 107.6  ✓ Generating static pages (18/18)
+#17 109.6    Finalizing page optimization ...
+#17 109.6    Collecting build traces ...
+#17 115.7 
+#17 115.7 Route (app)                                   Size     First Load JS
+#17 115.7 ┌ ○ /_not-found                               880 B          89.7 kB
+#17 115.7 ├ ƒ /analytics                                88 kB           221 kB
+#17 115.7 ├ ƒ /api/uploads/[[...path]]                  0 B                0 B
+#17 115.7 ├ ƒ /auth                                     4.33 kB         378 kB
+#17 115.7 ├ ƒ /auth/activate                            397 B          89.2 kB
+#17 115.7 ├ ƒ /auth/activate/[code]                     1.81 kB         107 kB
+#17 115.7 ├ ƒ /auth/forgot                              4.86 kB         139 kB
+#17 115.7 ├ ƒ /auth/forgot/[token]                      3.82 kB         138 kB
+#17 115.7 ├ ƒ /auth/login                               163 kB          479 kB
+#17 115.7 ├ ƒ /billing                                  18.5 kB         205 kB
+#17 115.7 ├ ƒ /billing/lifetime                         8.46 kB         175 kB
+#17 115.7 ├ ƒ /err                                      156 B          88.9 kB
+#17 115.7 ├ ƒ /integrations/social/[provider]           4.79 kB        93.6 kB
+#17 115.7 ├ ƒ /integrations/social/[provider]/continue  385 B          89.2 kB
+#17 115.7 ├ ƒ /launches                                 28.1 kB        1.58 MB
+#17 115.7 ├ ƒ /marketplace                              156 B          88.9 kB
+#17 115.7 ├ ƒ /marketplace/buyer                        203 B           140 kB
+#17 115.7 ├ ƒ /marketplace/seller                       4.24 kB         144 kB
+#17 115.7 ├ ƒ /messages                                 156 B          88.9 kB
+#17 115.7 ├ ƒ /messages/[id]                            15.6 kB         186 kB
+#17 115.7 ├ ƒ /modal/[style]/[platform]                 12.6 kB         1.3 MB
+#17 115.7 ├ ƒ /p/[id]                                   8.01 kB         133 kB
+#17 115.7 ├ ƒ /plugs                                    9.02 kB         328 kB
+#17 115.7 └ ƒ /settings                                 8.88 kB         505 kB
+#17 115.7 + First Load JS shared by all                 88.8 kB
+#17 115.7   ├ chunks/1528-1c61840ef608d87a.js           31.7 kB
+#17 115.7   ├ chunks/1dd3208c-d8fefb1b0f7a5ad4.js       53.6 kB
+#17 115.7   └ other shared chunks (total)               3.44 kB
+#17 115.7 
+#17 115.7 
+#17 115.7 ƒ Middleware                                  71.3 kB
+#17 115.7 
+#17 115.7 ○  (Static)   prerendered as static content
+#17 115.7 ƒ  (Dynamic)  server-rendered on demand
+#17 115.7 
+#17 115.8 
+#17 115.8 > postiz-backend@1.0.0 build /app/apps/backend
+#17 115.8 > NODE_ENV=production nest build
+#17 115.8 
+#17 136.6 
+#17 136.6 > postiz-workers@1.0.0 build /app/apps/workers
+#17 136.6 > NODE_ENV=production nest build
+#17 136.6 
+#17 154.0 
+#17 154.0 > postiz-cron@1.0.0 build /app/apps/cron
+#17 154.0 > NODE_ENV=production nest build
+#17 154.0 
+#17 DONE 171.1s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 44.0s done
+#18 writing image sha256:6b79d930823c0edcc67f16a32d13c8dbc0d9435fdc8df017db2270d1ec5fb185 done
+#18 naming to ghcr.io/cyberincome/postiz-app:debug-build 0.0s done
+#18 DONE 44.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/ugjydzcsktsx1uwg9zkd1cl7q
