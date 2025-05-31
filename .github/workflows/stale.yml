@@ -1,13 +1,13 @@
-name: Close inactive issues
+name: Close inactive issues in this repository # Renamed for clarity
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/30 * * * *" # Runs every 30 minutes
 
 jobs:
   close-issues:
-    if: github.repository == 'gitroomhq/postiz-app'
+    # if: github.repository == 'gitroomhq/postiz-app' # REMOVED or MODIFIED
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -15,19 +15,24 @@ jobs:
     steps:
       - uses: actions/stale@v9
         with:
+          # Issue settings
           days-before-issue-stale: 90
           days-before-issue-close: 7
           stale-issue-label: "stale"
           stale-issue-message: "This issue is stale because it has been open for 90 days with no activity."
           close-issue-message: "This issue was closed because it has been inactive for 7 days since being marked as stale." 
-          exempt-issue-labels: "no-stale-bot"
-          
+          exempt-issue-labels: "no-stale-bot,pinned,security" # Added common exemptions
+
+          # PR settings
           days-before-pr-stale: 90
-          days-before-pr-close: 7
+          days-before-pr-close: 7 # Set to -1 if you don't want to auto-close stale PRs
           stale-pr-label: "stale" 
           stale-pr-message: "This PR is stale because it has been open for 90 days with no activity."
           close-pr-message: "This PR was closed because it has been inactive for 7 days since being marked as stale." 
-          exempt-pr-label: "no-stale-bot" 
+          exempt-pr-labels: "no-stale-bot,work-in-progress" # Added common exemptions for PRs
           
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          operations-per-run: 180
+          # General settings
+          repo-token: ${{ secrets.GITHUB_TOKEN }} # This is correct
+          operations-per-run: 180 # Max operations per run, fine to keep
+          # remove-stale-when-updated: true # Consider adding this (default is true for issues, false for PRs)
+          # delete-branch: false # Consider if you want branches of closed PRs to be deleted

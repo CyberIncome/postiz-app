@@ -1,21 +1,23 @@
 ---
-name: "Build Containers Enterprise"
+name: "Build Containers Enterprise for My Fork" # Renamed for clarity
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering
   push:
     tags:
-      - '*'
+      - '*' # Triggers on any tag pushed
 
 jobs:
   build-containers-common:
     runs-on: ubuntu-latest
     outputs:
+      # CONTAINERVER will be the Git tag name (e.g., "v1.0-enterprise", "latest-enterprise-llm")
       containerver: ${{ steps.getcontainerver.outputs.containerver }}
     steps:
-      - name: Get Container Version
+      - name: Get Container Version from Git Tag
         id: getcontainerver
         run: |
+          # Extracts the tag name from the GitHub reference
           echo "containerver=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
 
   build-containers:
@@ -33,9 +35,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          submodules: 'true'
-          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0 # Fetches all history for all tags/branches
+          submodules: 'true' # Keep this if the enterprise version uses submodules
+          token: ${{ secrets.PAT_TOKEN }} # Keep this if submodules are private & need PAT
 
       - name: Set up QEMU (For ARM64 Builds)
         if: matrix.arch == 'arm64'
@@ -44,63 +46,91 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to ghcr
+      - name: Login to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+          username: ${{ github.actor }} # Your GitHub username
+          password: ${{ secrets.GITHUB_TOKEN }} # Use secrets.GITHUB_TOKEN
 
-      - name: Build and Push Image
+      - name: Build and Push Enterprise Image
         env:
+          # CONTAINERVER is the Git tag you pushed
           CONTAINERVER: ${{ needs.build-containers-common.outputs.containerver }}
+          OWNER_NAME: cyberincome                 # CHANGED: Your GitHub username
+          IMAGE_NAME: postiz-app-enterprise      # CHANGED: Your enterprise image name
         run: |
+          # This builds and pushes the architecture-specific image directly
+          # e.g., ghcr.io/cyberincome/postiz-app-enterprise:tag-amd64
           docker buildx build --platform linux/${{ matrix.arch }} \
             -f Dockerfile.dev \
-            -t ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-${{ matrix.arch }} \
+            -t ghcr.io/${{ env.OWNER_NAME }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINERVER }}-${{ matrix.arch }} \
             --provenance=false --sbom=false \
-            --output "type=registry,name=ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-${{ matrix.arch }}" .
+            --output "type=registry,name=ghcr.io/${{ env.OWNER_NAME }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINERVER }}-${{ matrix.arch }}" .
 
   build-container-manifest:
     needs: [build-containers, build-containers-common]
     runs-on: ubuntu-latest
     steps:
-      - name: Login to ghcr
+      - name: Login to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Docker Manifest
+      - name: Create Docker Manifest for Enterprise Image
         env:
+          # CONTAINERVER is the Git tag you pushed
           CONTAINERVER: ${{ needs.build-containers-common.outputs.containerver }}
+          OWNER_NAME: cyberincome                 # CHANGED: Your GitHub username
+          IMAGE_NAME: postiz-app-enterprise      # CHANGED: Your enterprise image name
         run: |
-          # Verify the architecture images
-          echo "Verifying AMD64 image:"
-          docker buildx imagetools inspect ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-amd64
+          # Define the image names
+          BASE_IMAGE_NAME="ghcr.io/${{ env.OWNER_NAME }}/${{ env.IMAGE_NAME }}"
+          VERSION_TAG="${{ env.CONTAINERVER }}"
+          AMD64_IMAGE="${BASE_IMAGE_NAME}:${VERSION_TAG}-amd64"
+          ARM64_IMAGE="${BASE_IMAGE_NAME}:${VERSION_TAG}-arm64"
+          VERSION_MANIFEST="${BASE_IMAGE_NAME}:${VERSION_TAG}"
+          LATEST_MANIFEST="${BASE_IMAGE_NAME}:latest" # This will create/update 'latest' for the enterprise image
+
+          # Verify the architecture images exist
+          echo "Verifying AMD64 image: ${AMD64_IMAGE}"
+          docker buildx imagetools inspect "${AMD64_IMAGE}"
           
-          echo "Verifying ARM64 image:"
-          docker buildx imagetools inspect ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-arm64
+          echo "Verifying ARM64 image: ${ARM64_IMAGE}"
+          docker buildx imagetools inspect "${ARM64_IMAGE}"
           
           # Try to remove any existing manifests first
-          docker manifest rm ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }} || true
-          docker manifest rm ghcr.io/gitroomhq/postiz-app-enterprise:latest || true
+          echo "Attempting to remove existing manifest for tag: ${VERSION_TAG}"
+          docker manifest rm "${VERSION_MANIFEST}" || echo "Manifest ${VERSION_MANIFEST} not found or removal failed, continuing..."
+          
+          echo "Attempting to remove existing manifest for tag: latest"
+          docker manifest rm "${LATEST_MANIFEST}" || echo "Manifest ${LATEST_MANIFEST} not found or removal failed, continuing..."
           
           # Create and push the version-specific manifest
-          docker manifest create ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }} \
-            --amend ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-amd64 \
-            --amend ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-arm64
+          # e.g., ghcr.io/cyberincome/postiz-app-enterprise:tag
+          echo "Creating manifest: ${VERSION_MANIFEST}"
+          docker manifest create "${VERSION_MANIFEST}" \
+            --amend "${AMD64_IMAGE}" \
+            --amend "${ARM64_IMAGE}"
+          docker manifest push "${VERSION_MANIFEST}"
 
-          docker manifest push ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}
+          # Create and push the 'latest' manifest for the enterprise image
+          # e.g., ghcr.io/cyberincome/postiz-app-enterprise:latest
+          echo "Creating manifest: ${LATEST_MANIFEST}"
+          docker manifest create "${LATEST_MANIFEST}" \
+            --amend "${AMD64_IMAGE}" \
+            --amend "${ARM64_IMAGE}"
+          docker manifest push "${LATEST_MANIFEST}"
 
-          # Create and push the latest manifest
-          docker manifest create ghcr.io/gitroomhq/postiz-app-enterprise:latest \
-            --amend ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-amd64 \
-            --amend ghcr.io/gitroomhq/postiz-app-enterprise:${{ env.CONTAINERVER }}-arm64
-
-          docker manifest push ghcr.io/gitroomhq/postiz-app-enterprise:latest
-
-      - name: Verify Manifest
+      - name: Verify Enterprise Manifests
+        env:
+          CONTAINERVER: ${{ needs.build-containers-common.outputs.containerver }}
+          OWNER_NAME: cyberincome                 # CHANGED
+          IMAGE_NAME: postiz-app-enterprise      # CHANGED
         run: |
-          docker manifest inspect ghcr.io/gitroomhq/postiz-app-enterprise:latest
+          echo "Verifying manifest for tag: ${{ env.CONTAINERVER }}"
+          docker manifest inspect ghcr.io/${{ env.OWNER_NAME }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINERVER }}
+          echo "Verifying manifest for tag: latest"
+          docker manifest inspect ghcr.io/${{ env.OWNER_NAME }}/${{ env.IMAGE_NAME }}:latest
