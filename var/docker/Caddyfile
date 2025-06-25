@@ -1,14 +1,20 @@
+{
+    auto_https off
+    admin off
+}
+
 :5000 {
-	handle_path /api/* {
-		reverse_proxy * localhost:3000
-	}
-
-	handle_path /uploads/* {
-		root * /uploads/
-		file_server
-	}
-
-	handle {
-		reverse_proxy * localhost:4200
-	}
+    handle /api/* {
+        reverse_proxy localhost:3000
+    }
+    
+    handle /uploads/* {
+        file_server {
+            root /app/uploads
+        }
+    }
+    
+    handle {
+        reverse_proxy localhost:4200
+    }
 }
