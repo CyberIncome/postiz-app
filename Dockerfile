@@ -15,7 +15,7 @@ COPY libraries/ ./libraries/
 COPY apps/ ./apps/
 
 # Install all dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Generate Prisma client
 RUN pnpm run prisma-generate
@@ -68,6 +68,9 @@ RUN apk add --no-cache supervisor
 
 # Copy supervisor configuration
 COPY var/docker/supervisord.conf /etc/supervisord.conf
+
+# Add after COPY commands
+RUN pnpm config list
 
 # Start with entrypoint script
 CMD ["./var/docker/entrypoint.sh"]
