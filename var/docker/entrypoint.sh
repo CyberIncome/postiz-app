@@ -1,17 +1,16 @@
 #!/bin/bash
 
-set -o xtrace
+# Ensure we use the PORT environment variable from Cloud Run
+export PORT=${PORT:-5000}
 
-# Wait for port 4200 to be open
-while ! nc -z localhost 4200; do
-  echo "Waiting for port 4200..."
-  sleep 1
-done
+# Initialize database
+echo "Running database migrations..."
+pnpm run prisma-db-push
 
-# Wait for port 3000 to be open
-while ! nc -z localhost 3000; do
-  echo "Waiting for port 3000..."
-  sleep 1
-done
+# Generate Prisma client if needed
+echo "Generating Prisma client..."
+pnpm run prisma-generate
 
-caddy run --config /app/Caddyfile
+# Start supervisord to manage all processes
+echo "Starting Postiz services..."
+exec supervisord -c /etc/supervisord.conf
