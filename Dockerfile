@@ -13,11 +13,13 @@ WORKDIR /app
 COPY tsconfig.base.json ./
 
 # Copy package management files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml build.plugins.js ./
+# REMOVED pnpm-lock.yaml from this line because it was deleted from the repo
+COPY package.json pnpm-workspace.yaml build.plugins.js ./
 COPY libraries/ ./libraries/
 COPY apps/ ./apps/
 
-# Install all dependencies
+# Install all dependencies and generate a new pnpm-lock.yaml
+# The --no-frozen-lockfile flag is essential here
 RUN pnpm install --no-frozen-lockfile
 
 # Generate Prisma client
@@ -26,7 +28,7 @@ RUN pnpm run prisma-generate
 # Build all applications
 RUN pnpm run build
 
-# Production stage
+# --- Production stage ---
 FROM node:20-alpine AS production
 
 # Install pnpm in production image
@@ -36,20 +38,22 @@ RUN npm install -g pnpm@10.6.1
 WORKDIR /app
 
 # Copy package files for production install
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-workspace.yaml ./
 COPY libraries/ ./libraries/
 COPY apps/ ./apps/
 
-# Install only production dependencies
+# Copy the NEW pnpm-lock.yaml generated in the 'base' stage
+COPY --from=base /app/pnpm-lock.yaml ./
+
+# Install only production dependencies using the new lockfile
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built applications from build stage
-# Note: The Next.js build output is typically .next, not dist
+# Note: The Next.js build output is .next
 COPY --from=base /app/apps/frontend/.next ./apps/frontend/.next
 COPY --from=base /app/apps/backend/dist ./apps/backend/dist
 COPY --from=base /app/apps/workers/dist ./apps/workers/dist
 COPY --from=base /app/apps/cron/dist ./apps/cron/dist
-
 
 # Copy Prisma generated client
 COPY --from=base /app/node_modules/.pnpm ./node_modules/.pnpm
