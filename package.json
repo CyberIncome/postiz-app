@@ -85,7 +85,7 @@
     "@nx/workspace": "19.7.2",
     "@postiz/wallets": "0.0.1",
     "@prisma/client": "6.10.1",
-    "@solana/wallet-adapter-base": "0.15.39",
+    "@solana/wallet-adapter-base": "0.9.27",
     "@solana/wallet-adapter-base-ui": "0.1.6",
     "@solana/wallet-adapter-react": "0.15.39",
     "@solana/wallet-adapter-react-ui": "0.9.39",
