@@ -90,6 +90,8 @@
     "@solana/wallet-adapter-react": "0.15.39",
     "@solana/wallet-adapter-react-ui": "0.9.39",
     "@solana/web3.js": "^1.91.0",
+    "slate": "^0.102.0",
+    "slate-react": "^0.102.0",
     "@swc/helpers": "0.5.13",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/bcrypt": "^5.0.2",
