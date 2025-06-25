@@ -10,7 +10,7 @@ RUN npm install -g pnpm@10.6.1
 WORKDIR /app
 
 # Copy package management files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml build.plugins.js ./
 COPY libraries/ ./libraries/
 COPY apps/ ./apps/
 
