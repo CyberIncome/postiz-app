@@ -9,6 +9,9 @@ RUN npm install -g pnpm@10.6.1
 # Set working directory
 WORKDIR /app
 
+# Copy the tsconfig file that is missing
+COPY tsconfig.base.json ./
+
 # Copy package management files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml build.plugins.js ./
 COPY libraries/ ./libraries/
@@ -41,10 +44,12 @@ COPY apps/ ./apps/
 RUN pnpm install --frozen-lockfile --prod
 
 # Copy built applications from build stage
-COPY --from=base /app/apps/frontend/dist ./apps/frontend/dist
+# Note: The Next.js build output is typically .next, not dist
+COPY --from=base /app/apps/frontend/.next ./apps/frontend/.next
 COPY --from=base /app/apps/backend/dist ./apps/backend/dist
 COPY --from=base /app/apps/workers/dist ./apps/workers/dist
 COPY --from=base /app/apps/cron/dist ./apps/cron/dist
+
 
 # Copy Prisma generated client
 COPY --from=base /app/node_modules/.pnpm ./node_modules/.pnpm
