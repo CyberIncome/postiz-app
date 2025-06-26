@@ -1,5 +1,4 @@
 // libraries/nestjs-libraries/src/services/trending.service.ts
-
 import json from './trending';
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
@@ -24,7 +23,6 @@ export class TrendingService {
           position: index + 1,
         };
       });
-
       const hashedNames = md5(arr.map((p) => p.name).join(''));
       console.log('Updating GitHub trending topic', language, hashedNames);
       await this._starsService.updateTrending(language.name, hashedNames, arr);
