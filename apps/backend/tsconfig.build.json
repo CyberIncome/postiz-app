@@ -19,6 +19,12 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@gitroom/nestjs-libraries/*": ["../../libraries/nestjs-libraries/src/*"],
+      "@gitroom/react/*": ["../../libraries/react-shared-libraries/src/*"],
+      "@gitroom/helpers/*": ["../../libraries/helpers/src/*"],
+      "@gitroom/frontend/*": ["../../apps/frontend/src/*"]
+    },
     "outDir": "./dist"
   }
 }
