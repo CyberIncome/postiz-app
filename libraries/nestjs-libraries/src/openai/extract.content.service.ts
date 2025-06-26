@@ -2,6 +2,16 @@
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
 
+function findDepth(element: any) {
+  let depth = 0;
+  let elementer = element;
+  while (elementer.parentNode) {
+    depth++;
+    elementer = elementer.parentNode;
+  }
+  return depth;
+}
+
 @Injectable()
 export class ExtractContentService {
   async extractContent(url: string) {
@@ -11,21 +21,28 @@ export class ExtractContentService {
     const allTitles = Array.from(dom.window.document.querySelectorAll('*'));
 
     const findTheOneWithMostTitles = allTitles.reduce(
-      (all: any, current: any) => { // Use 'any' on both parameters
+      (all: any, current: any) => {
         const hasTitle = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].some((tag) =>
           current.querySelector(tag)
         );
-        if (!hasTitle) return all;
+        if (!hasTitle) {
+          return all;
+        }
 
-        // ... (rest of the logic remains the same)
-        const depth = 0; // Simplified for brevity, original logic can stay
-        if (current.children.length > all.total) {
-          return { total: current.children.length, depth, element: current };
+        const depth = findDepth(current);
+        const calculate = current.querySelectorAll('h1,h2,h3,h4,h5,h6').length;
+
+        if (calculate > all.total) {
+          return { total: calculate, depth, element: current };
+        }
+
+        if (depth > all.depth) {
+          return { total: calculate, depth, element: current };
         }
         return all;
       },
       { total: 0, depth: 0, element: null }
-    );
+    ) as any;
 
     return findTheOneWithMostTitles?.element?.textContent
       ?.replace(/\n/g, ' ')
