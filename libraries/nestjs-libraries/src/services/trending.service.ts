@@ -1,3 +1,5 @@
+// libraries/nestjs-libraries/src/services/trending.service.ts
+
 import json from './trending';
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
@@ -16,7 +18,7 @@ export class TrendingService {
       const trending = Array.from(
         dom.window.document.querySelectorAll('[class="Link"]')
       );
-      const arr = trending.map((el, index) => {
+      const arr = trending.map((el: any, index) => { // Use 'any' to fix the error
         return {
           name: el?.textContent?.trim().replace(/\s/g, '') || '',
           position: index + 1,
