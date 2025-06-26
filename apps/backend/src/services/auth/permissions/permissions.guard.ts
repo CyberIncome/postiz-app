@@ -39,7 +39,6 @@ export class PoliciesGuard implements CanActivate {
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     const { org }: { org: Organization } = request;
 
     // @ts-ignore
