@@ -12,7 +12,7 @@ import { Request, Response } from 'express';
 export class CopilotController {
   @Post()
   chat(@Req() req: Request, @Res() res: Response): void { // Added ': void' return type
-    const copilotKit = new CopilotKit({
+    const copilotRuntime = new CopilotRuntime({
       // langserve: [
       //   new LangserveAdapter({
       //     url: "http://localhost:8080/cities"
