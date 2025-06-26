@@ -20,7 +20,7 @@ export class ExtractContentService {
 
     // only element that has a title
     const allTitles = Array.from(dom.window.document.querySelectorAll('*'))
-      .filter((f) => {
+      .filter((f: Element) => { // FIX 1: Explicitly type 'f' as Element
         return (
           f.querySelector('h1') ||
           f.querySelector('h2') ||
@@ -33,7 +33,11 @@ export class ExtractContentService {
       .reverse();
 
     const findTheOneWithMostTitles = allTitles.reduce(
-      (all, current) => {
+      // FIX 2: Explicitly type the 'all' and 'current' parameters for the reducer
+      (
+        all: { total: number; depth: number; element: Element | null },
+        current: Element
+      ) => {
         const depth = findDepth(current);
         const calculate = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].reduce(
           (total, tag) => {
@@ -61,32 +65,5 @@ export class ExtractContentService {
     return findTheOneWithMostTitles?.element?.textContent
       ?.replace(/\n/g, ' ')
       .replace(/ {2,}/g, ' ');
-    //
-    // const allElements = Array.from(
-    //   dom.window.document.querySelectorAll('*')
-    // ).filter((f) => f.tagName !== 'SCRIPT');
-    // const findIndex = allElements.findIndex((element) => {
-    //   return (
-    //     ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].indexOf(
-    //       element.tagName.toLowerCase()
-    //     ) > -1
-    //   );
-    // });
-    //
-    // if (!findIndex) {
-    //   return false;
-    // }
-    //
-    // return allElements
-    //   .slice(findIndex)
-    //   .map((element) => element.textContent)
-    //   .filter((f) => {
-    //     const trim = f?.trim();
-    //     return (trim?.length || 0) > 0 && trim !== '\n';
-    //   })
-    //   .map((f) => f?.trim())
-    //   .join('')
-    //   .replace(/\n/g, ' ')
-    //   .replace(/ {2,}/g, ' ');
   }
 }
