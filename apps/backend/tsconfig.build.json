@@ -10,6 +10,7 @@
     "sourceMap": true,
     "incremental": true,
     "skipLibCheck": true,
+    "strict": false,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
@@ -20,6 +21,8 @@
     "paths": {
       "@gitroom/nestjs-libraries/*": ["../../libraries/nestjs-libraries/src/*"],
       "@gitroom/helpers/*": ["../../libraries/helpers/src/*"],
-      "@gitroom/backend/*": ["./src/*"]
+      "@gitroom/backend/*": ["./src/*"],
+      "@gitroom/cron/*": ["./src/*"],
+      "@gitroom/workers/*": ["./src/*"]
     }
   }
