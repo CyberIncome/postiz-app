@@ -1,30 +1,24 @@
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
-  "compilerOptions": {
-    "module": "CommonJS",
-    "resolveJsonModule": true,
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
-    "incremental": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@gitroom/nestjs-libraries/*": ["../../libraries/nestjs-libraries/src/*"],
-      "@gitroom/react/*": ["../../libraries/react-shared-libraries/src/*"],
-      "@gitroom/helpers/*": ["../../libraries/helpers/src/*"],
-      "@gitroom/frontend/*": ["../../apps/frontend/src/*"]
-    },
-    "outDir": "./dist"
-  }
+"extends": "./tsconfig.json",
+"exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
+"compilerOptions": {
+"module": "CommonJS",
+"resolveJsonModule": true,
+"declaration": true,
+"removeComments": true,
+"emitDecoratorMetadata": true,
+"experimentalDecorators": true,
+"allowSyntheticDefaultImports": true,
+"target": "ES2021",
+"sourceMap": true,
+"incremental": true,
+"skipLibCheck": true,
+"strict": false,
+"strictNullChecks": false,
+"noImplicitAny": false,
+"strictBindCallApply": false,
+"forceConsistentCasingInFileNames": false,
+"noFallthroughCasesInSwitch": false,
+"outDir": "./dist"
+}
 }
