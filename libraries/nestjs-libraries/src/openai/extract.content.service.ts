@@ -34,7 +34,7 @@ export class ExtractContentService {
     const findTheOneWithMostTitles = allTitles.reduce(
       (
         all: { total: number; depth: number; element: Element | null },
-        current: any // <--- THE ONLY CHANGE THAT MATTERS
+        current: any
       ) => {
         const depth = findDepth(current);
         const calculate = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].reduce(
@@ -58,7 +58,7 @@ export class ExtractContentService {
         return all;
       },
       { total: 0, depth: 0, element: null as Element | null }
-    );
+    ) as any; // <--- THIS IS THE FIX
 
     return findTheOneWithMostTitles?.element?.textContent
       ?.replace(/\n/g, ' ')
