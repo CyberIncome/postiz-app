@@ -1,0 +1,12 @@
+# .gcloudignore
+
+.git
+.gitignore
+.idea
+.vscode
+node_modules/
+dist/
+coverage/
+README.md
+Dockerfile.dev
+docker-compose.dev.yaml
