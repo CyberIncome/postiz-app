@@ -1,0 +1,17 @@
+# cloudbuild.yaml
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/postiz-app:$COMMIT_SHA', '.']
+    timeout: '1800s' # 30 minutes
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push'
+    args: ['push', 'gcr.io/$PROJECT_ID/postiz-app:$COMMIT_SHA']
+
+# Define machine type and disk size for all steps
+options:
+  machineType: 'E2_HIGHCPU_32' # Use a powerful machine for this complex build
+  diskSizeGb: '100'
+
+# Set a generous overall timeout for the build
+timeout: '2400s' # 40 minutes
