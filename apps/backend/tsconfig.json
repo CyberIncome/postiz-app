@@ -1,6 +1,7 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
+// This is the new, correct compilerOptions block.
+// Paste this into apps/backend/tsconfig.json, apps/workers/tsconfig.json, and apps/cron/tsconfig.json.
+
+"compilerOptions": {
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -8,11 +9,10 @@
     "target": "es2017",
     "sourceMap": true,
     "esModuleInterop": true,
+    "baseUrl": "./",
     "paths": {
       "@gitroom/nestjs-libraries/*": ["../../libraries/nestjs-libraries/src/*"],
-      "@gitroom/react/*": ["../../libraries/react-shared-libraries/src/*"],
       "@gitroom/helpers/*": ["../../libraries/helpers/src/*"],
-      "@gitroom/frontend/*": ["../../apps/frontend/src/*"]
+      "@gitroom/backend/*": ["./src/*"]
     }
   }
-}
