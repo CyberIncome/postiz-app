@@ -47,6 +47,8 @@
     "@atproto/api": "^0.15.17",
     "@aws-sdk/client-s3": "^3.837.0",
     "@aws-sdk/s3-request-presigner": "^3.837.0",
+    "@blueprintjs/core": "^5.10.3",
+    "@blueprintjs/icons": "^5.8.3",
     "@casl/ability": "^6.7.3",
     "@copilotkit/react-core": "^1.9.1",
     "@copilotkit/react-textarea": "^1.9.1",
