@@ -1,24 +1,28 @@
-{
-"extends": "./tsconfig.json",
-"exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
+// This is the new, correct compilerOptions block.
+// Paste this into apps/backend/tsconfig.build.json, apps/workers/tsconfig.build.json, and apps/cron/tsconfig.build.json.
+
 "compilerOptions": {
-"module": "CommonJS",
-"resolveJsonModule": true,
-"declaration": true,
-"removeComments": true,
-"emitDecoratorMetadata": true,
-"experimentalDecorators": true,
-"allowSyntheticDefaultImports": true,
-"target": "ES2021",
-"sourceMap": true,
-"incremental": true,
-"skipLibCheck": true,
-"strict": false,
-"strictNullChecks": false,
-"noImplicitAny": false,
-"strictBindCallApply": false,
-"forceConsistentCasingInFileNames": false,
-"noFallthroughCasesInSwitch": false,
-"outDir": "./dist"
-}
-}
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@gitroom/nestjs-libraries/*": ["../../libraries/nestjs-libraries/src/*"],
+      "@gitroom/helpers/*": ["../../libraries/helpers/src/*"],
+      "@gitroom/backend/*": ["./src/*"]
+    }
+  }
