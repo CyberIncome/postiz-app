@@ -1,5 +1,4 @@
 // apps/backend/src/api/routes/copilot.controller.ts
-
 import { Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '@gitroom/nestjs-libraries/services/auth/public.decorator';
@@ -11,15 +10,8 @@ import { Request, Response } from 'express';
 @Public()
 export class CopilotController {
   @Post()
-  chat(@Req() req: Request, @Res() res: Response): void { // Added ': void' return type
-    const copilotRuntime = new CopilotRuntime({
-      // langserve: [
-      //   new LangserveAdapter({
-      //     url: "http://localhost:8080/cities"
-      //   }),
-      // ],
-    });
-
-    copilotKit.stream(req.body, res);
+  chat(@Req() req: Request, @Res() res: Response): void {
+    const copilotRuntime = new CopilotRuntime({}); // Corrected variable name
+    copilotRuntime.stream(req.body, (chunk) => res.write(chunk));
   }
 }
