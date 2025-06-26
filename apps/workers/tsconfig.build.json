@@ -1,6 +1,3 @@
-// This is the new, correct compilerOptions block.
-// Paste this into apps/backend/tsconfig.build.json, apps/workers/tsconfig.build.json, and apps/cron/tsconfig.build.json.
-
 "compilerOptions": {
     "module": "CommonJS",
     "resolveJsonModule": true,
