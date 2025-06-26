@@ -1,16 +1,32 @@
 # cloudbuild.yaml
 steps:
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/postiz-app:$COMMIT_SHA', '.']
     timeout: '1800s' # 30 minutes
+
+  # Step 2: Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Push'
     args: ['push', 'gcr.io/$PROJECT_ID/postiz-app:$COMMIT_SHA']
 
-# Define machine type and disk size for all steps
+  # Step 3: Deploy the new image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'postiz-app' # <-- This must match the name of your Cloud Run service
+      - '--image=gcr.io/$PROJECT_ID/postiz-app:$COMMIT_SHA'
+      - '--region=us-central1' # <-- VERY IMPORTANT: Replace with your region (e.g., us-central1)
+      - '--platform=managed'
+      - '--allow-unauthenticated' # Allows public access to your service
+
+# Define machine type and disk size for the entire build
 options:
-  machineType: 'E2_HIGHCPU_32' # Use a powerful machine for this complex build
+  machineType: 'E2_HIGHCPU_32'
   diskSizeGb: '100'
 
 # Set a generous overall timeout for the build
