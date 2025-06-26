@@ -3,7 +3,7 @@
 import { Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '@gitroom/nestjs-libraries/services/auth/public.decorator';
-import { CopilotKit } from '@copilotkit/runtime';
+import { CopilotRuntime } from '@copilotkit/runtime';
 import { Request, Response } from 'express';
 
 @ApiTags('Copilot')
