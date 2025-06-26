@@ -12,7 +12,7 @@ import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/s
 export class CopilotController {
   constructor(private _subscriptionService: SubscriptionService) {}
   @Post('/chat')
-  chat(@Req() req: Request, @Res() res: Response) {
+  chat(@Req() req: Request, @Res() res: Response): void {
     if (
       process.env.OPENAI_API_KEY === undefined ||
       process.env.OPENAI_API_KEY === ''
