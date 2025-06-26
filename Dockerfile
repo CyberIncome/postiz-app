@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
 
 # --- Build Stage ---
+# The "Workshop" where we have all the tools to build the app
 FROM node:20-alpine AS base
 
-# Install system dependencies for native modules (e.g., canvas, sharp)
-RUN apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev
+# Install system dependencies, including python3 and make for full build compatibility
+RUN apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev python3 make
 
 # Install pnpm globally
 RUN npm install -g pnpm@10.6.1
@@ -12,35 +13,29 @@ RUN npm install -g pnpm@10.6.1
 # Set working directory
 WORKDIR /app
 
-# Copy the tsconfig file that is missing
-COPY tsconfig.base.json ./
-
-# Copy package management files
+# Copy configuration and source code
 COPY package.json pnpm-workspace.yaml build.plugins.js ./
+COPY tsconfig.base.json ./
 COPY libraries/ ./libraries/
 COPY apps/ ./apps/
 
-# Install all dependencies and generate a new pnpm-lock.yaml
-# This will compile native dependencies using the tools we just installed
+# Install all dependencies (including devDependencies needed for the build)
 RUN pnpm install --no-frozen-lockfile
 
-# Generate Prisma client
-RUN pnpm run prisma-generate
-
-# Build all applications
+# Build all applications (the root build script now handles prisma-generate)
 RUN pnpm run build
 
 
 # --- Production Stage ---
+# The lean, final "Showroom" image that will be deployed
 FROM node:20-alpine AS production
 
-# Install ONLY the runtime system dependencies for the native modules
-RUN apk add --no-cache cairo jpeg pango giflib
+# Install runtime libs, tini (for signal handling), and supervisor (for process management)
+RUN apk add --no-cache tini supervisor cairo jpeg pango giflib
 
-# Install pnpm in production image
+# Install pnpm, which is needed for the 'pnpm prune' command
 RUN npm install -g pnpm@10.6.1
 
-# Create app directory
 WORKDIR /app
 
 # Copy only the necessary package files to describe the project structure
@@ -50,33 +45,29 @@ COPY package.json pnpm-workspace.yaml ./
 COPY --from=base /app/pnpm-lock.yaml ./
 COPY --from=base /app/node_modules ./node_modules
 
-# Remove non-production packages from the copied node_modules
+# Remove non-production packages to keep the image small
 RUN pnpm prune --prod
 
-# Copy built applications from build stage
+# Copy the compiled applications from the 'base' stage into this final stage
 COPY --from=base /app/apps/frontend/.next ./apps/frontend/.next
 COPY --from=base /app/apps/backend/dist ./apps/backend/dist
 COPY --from=base /app/apps/workers/dist ./apps/workers/dist
 COPY --from=base /app/apps/cron/dist ./apps/cron/dist
 
-# Copy Docker-specific files
-COPY var/docker/ ./var/docker/
+# Copy supervisor configuration and entrypoint script
+COPY var/docker/supervisord.conf /etc/supervisord.conf
+COPY var/docker/entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
 
-# Make entrypoint script executable
-RUN chmod +x ./var/docker/entrypoint.sh
-
-# Expose port (Cloud Run will inject PORT env var)
+# Expose the correct port
 EXPOSE 5000
 
-# Set environment variables for Cloud Run
+# Set environment for production
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Use supervisord to manage multiple processes
-RUN apk add --no-cache supervisor
+# Use tini as the main process to ensure graceful shutdowns
+ENTRYPOINT ["/sbin/tini", "--"]
 
-# Copy supervisor configuration
-COPY var/docker/supervisord.conf /etc/supervisord.conf
-
-# Start with entrypoint script
-CMD ["./var/docker/entrypoint.sh"]
+# Start supervisor as the default command
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
