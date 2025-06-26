@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
 
+// Define the shape of the object we are building in the reducer
+type BestElementAccumulator = {
+  total: number;
+  depth: number;
+  element: Element | null;
+};
+
 function findDepth(element: Element) {
   let depth = 0;
   let elementer = element;
@@ -18,26 +25,18 @@ export class ExtractContentService {
     const load = await (await fetch(url)).text();
     const dom = new JSDOM(load);
 
-    // only element that has a title
-    const allTitles = Array.from(dom.window.document.querySelectorAll('*'))
-      .filter((f: Element) => { // FIX 1: Explicitly type 'f' as Element
-        return (
-          f.querySelector('h1') ||
-          f.querySelector('h2') ||
-          f.querySelector('h3') ||
-          f.querySelector('h4') ||
-          f.querySelector('h5') ||
-          f.querySelector('h6')
-        );
-      })
-      .reverse();
+    const allTitles = Array.from(dom.window.document.querySelectorAll('*'));
 
-    const findTheOneWithMostTitles = allTitles.reduce(
-      // FIX 2: Explicitly type the 'all' and 'current' parameters for the reducer
-      (
-        all: { total: number; depth: number; element: Element | null },
-        current: Element
-      ) => {
+    const findTheOneWithMostTitles = allTitles.reduce<BestElementAccumulator>(
+      (all, current) => {
+        const hasTitle = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].some((tag) =>
+          current.querySelector(tag)
+        );
+
+        if (!hasTitle) {
+          return all;
+        }
+        
         const depth = findDepth(current);
         const calculate = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].reduce(
           (total, tag) => {
@@ -59,7 +58,7 @@ export class ExtractContentService {
 
         return all;
       },
-      { total: 0, depth: 0, element: null as Element | null }
+      { total: 0, depth: 0, element: null } // Initial Value
     );
 
     return findTheOneWithMostTitles?.element?.textContent
